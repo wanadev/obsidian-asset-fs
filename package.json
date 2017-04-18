@@ -1,0 +1,28 @@
+{
+  "name": "obsidian-asset-fs",
+  "version": "0.0.0",
+  "description": "An high-level way to handled obsidian pack",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "browserify test/index.js -o test/browser/test.generated.js && mocha-phantomjs test/browser/index.html"
+  },
+  "keywords": [
+    "obsidian",
+    "pack",
+    "asset",
+    "fs"
+  ],
+  "author": "Wanadev <http://www.wanadev.fr/>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "abitbol": "^1.1.1",
+    "obsidian-pack": "^1.0.1",
+    "q": "^1.5.0"
+  },
+  "devDependencies": {
+    "browserify": "^14.3.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^3.2.0",
+    "mocha-phantomjs": "^4.1.0"
+  }
+}

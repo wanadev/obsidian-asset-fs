@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <meta charset="UTF-8" />
+        <title>Obsidian Pack FS Tests</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="./mocha.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div id="mocha"></div>
+
+        <script src="./mocha.js"></script>
+        <script>mocha.setup("bdd");</script>
+        <script src="./test.generated.js"></script>
+        <script>
+            mocha.checkLeaks();
+            mocha.run();
+        </script>
+    </body>
+
+</html>

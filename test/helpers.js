@@ -17,7 +17,10 @@ describe("helpers", function() {
                 .then(function(buffer) {
                     expect(buffer).to.be.a(Buffer);
                     expect(buffer).to.have.length(4);
-                    expect(buffer).to.eql([1, 2, 3, 4]);
+                    expect(buffer[0]).to.equal(1);
+                    expect(buffer[1]).to.equal(2);
+                    expect(buffer[2]).to.equal(3);
+                    expect(buffer[3]).to.equal(4);
                 });
         });
 

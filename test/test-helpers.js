@@ -94,8 +94,8 @@ function readBlobAsBuffer(blob) {
     return Q.Promise(function(resolve, reject) {
         var reader = new FileReader();
         reader.onerror = reject;
-        reader.onload = function(arr) {
-            resolve(Buffer.from(arr));
+        reader.onload = function(event) {
+            resolve(Buffer.from(event.target.result));
         };
         reader.readAsArrayBuffer(blob);
     });

@@ -17,7 +17,7 @@ describe("AssetFs", function() {
 
     describe("setDataFetcher", function() {
 
-        it("should change the data fetcher function that wil lbe called to fetch fragments", function(done) {
+        it("should change the data fetcher function that will be called to fetch fragments", function(done) {
             this.assetFs.setDataFetcher(function(url) {
                 expect(url).to.match(/^.*4854557d-22f6-4727-96f5-7576a98010ed\.oaf$/);
                 done();
@@ -186,7 +186,10 @@ describe("AssetFs", function() {
                 .then(testHelpers.readBlobAsBuffer)
                 .then(function(assetBuffer) {
                     expect(assetBuffer).to.have.length(4);
-                    expect(assetBuffer).to.eql([0, 1, 2, 3]);
+                    expect(assetBuffer[0]).to.equal(0);
+                    expect(assetBuffer[1]).to.equal(1);
+                    expect(assetBuffer[2]).to.equal(2);
+                    expect(assetBuffer[3]).to.equal(3);
                 });
         });
 

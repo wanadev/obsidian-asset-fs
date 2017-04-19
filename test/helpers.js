@@ -40,4 +40,8 @@ describe("helpers", function() {
 
     });
 
+    describe("imageFromUrl", function() {
+        // TODO
+    });
+
 });

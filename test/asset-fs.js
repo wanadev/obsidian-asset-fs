@@ -180,7 +180,7 @@ describe("AssetFs", function() {
     describe("getAssetAsBlob", function() {
 
         it("returns the asset as a Blob", function() {
-            return this.getAssetAsBlob("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsBlob("random-stuff/bin/asset1.bin")
                 .then(function(assetBlob) {
                     expect(assetBlob).to.be.a(Blob);
                     expect(assetBlob.size).to.equal(4);
@@ -191,12 +191,12 @@ describe("AssetFs", function() {
         it("returns always the same Blob instance", function() {
             var blob = null;
 
-            return this.getAssetAsBlob("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsBlob("random-stuff/bin/asset1.bin")
                 .then(function(assetBlob) {
                     blob = assetBlob;
                     expect(assetBlob).to.be.a(Blob);
                 })
-                .then(this.getAssetAsBlob.bind(undefined, "random-stuff/bin/asset1.bin"))
+                .then(this.assetFs.getAssetAsBlob.bind(undefined, "random-stuff/bin/asset1.bin"))
                 .then(function(assetBlob) {
                     expect(assetBlob).to.be.a(Blob);
                     expect(assetBlob).to.be(blob);
@@ -204,7 +204,7 @@ describe("AssetFs", function() {
         });
 
         it("returns the right data in the Blob", function() {
-            return this.getAssetAsBlob("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsBlob("random-stuff/bin/asset1.bin")
                 .then(testHelpers.readBlobAsBuffer)
                 .then(function(assetBuffer) {
                     expect(assetBuffer).to.have.length(4);
@@ -216,7 +216,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not referenced", function() {
-            return this.getAssetAsBlob("foo")
+            return this.assetFs.getAssetAsBlob("foo")
                 .then(function(assetBlob) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -230,29 +230,29 @@ describe("AssetFs", function() {
     describe("getAssetAsBlobUrl", function() {
 
         it("returns the asset as a Blob URL", function() {
-            return this.getAssetAsBlobUrl("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsBlobUrl("random-stuff/bin/asset1.bin")
                 .then(function(assetBlobUrl) {
-                    expect(assetBlobUrl).to.be.a(String);
+                    expect(assetBlobUrl).to.be.a("string");
                 });
         });
 
         it("returns always the same Blob URL", function() {
             var url = null;
 
-            return this.getAssetAsBlobUrl("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsBlobUrl("random-stuff/bin/asset1.bin")
                 .then(function(assetBlobUrl) {
                     url = assetBlobUrl;
-                    expect(assetBlobUrl).to.be.a(String);
+                    expect(assetBlobUrl).to.be.a("string");
                 })
-                .then(this.getAssetAsBlobUrl.bind(undefined, "random-stuff/bin/asset1.bin"))
+                .then(this.assetFs.getAssetAsBlobUrl.bind(undefined, "random-stuff/bin/asset1.bin"))
                 .then(function(assetBlobUrl) {
-                    expect(assetBlobUrl).to.be.a(String);
+                    expect(assetBlobUrl).to.be.a("string");
                     expect(assetBlobUrl).to.equal(url);
                 });
         });
 
         it("reject the promise if the asset is not referenced", function() {
-            return this.getAssetAsBlobUrl("foo")
+            return this.assetFs.getAssetAsBlobUrl("foo")
                 .then(function(assetBlobUrl) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -266,7 +266,7 @@ describe("AssetFs", function() {
     describe("getAssetAsBuffer", function() {
 
         it("returns the asset as a Buffer", function() {
-            return this.getAssetAsBuffer("random-stuff/bin/asset2.bin")
+            return this.assetFs.getAssetAsBuffer("random-stuff/bin/asset2.bin")
                 .then(function(assetBuffer) {
                     expect(assetBuffer).to.be.a(Buffer);
                     expect(assetBuffer).to.have.length(4);
@@ -275,7 +275,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not referenced", function() {
-            return this.getAssetAsBuffer("foo")
+            return this.assetFs.getAssetAsBuffer("foo")
                 .then(function(assetBuffer) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -289,14 +289,14 @@ describe("AssetFs", function() {
     describe("getAssetAsImage", function() {
 
         it("returns the asset as a Image", function() {
-            return this.getAssetAsImage("assets/textures/category/image.png")
+            return this.assetFs.getAssetAsImage("assets/textures/category/image.png")
                 .then(function(assetImage) {
                     expect(assetImage).to.be.an(Image);
                 });
         });
 
         it("rejects the promise if the asset is not an image", function() {
-            return this.getAssetAsImage("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsImage("random-stuff/bin/asset1.bin")
                 .then(function(assetImage) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -306,7 +306,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not referenced", function() {
-            return this.getAssetAsImage("foo")
+            return this.assetFs.getAssetAsImage("foo")
                 .then(function(assetImage) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -320,7 +320,7 @@ describe("AssetFs", function() {
     describe("getAssetAsText", function() {
 
         it("returns the asset as a string", function() {
-            return this.getAssetAsText("text.txt")
+            return this.assetFs.getAssetAsText("text.txt")
                 .then(function(assetText) {
                     expect(assetText).to.be.a("string");
                     expect(assetText).to.have.length(5);
@@ -329,7 +329,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not referenced", function() {
-            return this.getAssetAsText("foo")
+            return this.assetFs.getAssetAsText("foo")
                 .then(function(assetText) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -343,7 +343,7 @@ describe("AssetFs", function() {
     describe("getAssetAsObject", function() {
 
         it("returns the asset as an Object", function() {
-            return this.getAssetAsObject("assets/textures/category/image.png")
+            return this.assetFs.getAssetAsObject("assets/textures/category/image.png")
                 .then(function(assetObject) {
                     expect(assetObject).to.be.an("object");
                     expect(assetObject.a).to.equal(1);
@@ -351,7 +351,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not a valid JSON object", function() {
-            return this.getAssetAsObject("random-stuff/bin/asset1.bin")
+            return this.assetFs.getAssetAsObject("random-stuff/bin/asset1.bin")
                 .then(function(assetObject) {
                     throw new Error("ShouldNotBeRaised");
                 })
@@ -361,7 +361,7 @@ describe("AssetFs", function() {
         });
 
         it("rejects the promise if the asset is not referenced", function() {
-            return this.getAssetAsObject("foo")
+            return this.assetFs.getAssetAsObject("foo")
                 .then(function(assetObject) {
                     throw new Error("ShouldNotBeRaised");
                 })

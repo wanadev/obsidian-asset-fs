@@ -1,7 +1,8 @@
 "use strict";
 
-var url = require("url");
+var nodeUrl = require("url");
 
+var Q = require("q");
 var expect = require("expect.js");
 
 var AssetFs = require("../lib/asset-fs.js");
@@ -12,7 +13,7 @@ describe("AssetFs", function() {
     beforeEach(function() {
         this.assetFs = new AssetFs();
         this.assetFs.setDataFetcher(testHelpers.fakeDataFetcher);
-        this.assetFs.addIndexFromUrl("/index.json");
+        return this.assetFs.addIndexFromUrl("default-index.json");
     });
 
     describe("setDataFetcher", function() {
@@ -21,6 +22,7 @@ describe("AssetFs", function() {
             this.assetFs.setDataFetcher(function(url) {
                 expect(url).to.match(/^.*4854557d-22f6-4727-96f5-7576a98010ed\.oaf$/);
                 done();
+                return Q();
             });
             this.assetFs.preloadAsset("random-stuff/bin/asset1.bin");
         });
@@ -39,8 +41,9 @@ describe("AssetFs", function() {
             this.assetFs.addIndex(testHelpers.OTHER_INDEX);
 
             this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal(url.resolve(location.href, "test-fragment.oaf"));
+                expect(url).to.equal(nodeUrl.resolve(global.location.href, "test-fragment.oaf"));
                 done();
+                return Q();
             });
             this.assetFs.preloadAsset("test-asset.bin");
         });
@@ -51,19 +54,21 @@ describe("AssetFs", function() {
             this.assetFs.setDataFetcher(function(url) {
                 expect(url).to.equal("http://example.com/test-fragment.oaf");
                 done();
+                return Q();
             });
             this.assetFs.preloadAsset("test-asset.bin");
         });
 
         it("should resolve the fragments URLs from the given RELATIVE root URL if provided", function(done) {
             var root = "./folder/";
-            var resolvedRoot = url.resolve(location.href, root);
+            var resolvedRoot = nodeUrl.resolve(global.location.href, root);
 
             this.assetFs.addIndex(testHelpers.OTHER_INDEX, root);
 
             this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal(url.resolve(resolvedRoot, "test-fragment.oaf"));
+                expect(url).to.equal(nodeUrl.resolve(resolvedRoot, "test-fragment.oaf"));
                 done();
+                return Q();
             });
             this.assetFs.preloadAsset("test-asset.bin");
         });
@@ -73,45 +78,59 @@ describe("AssetFs", function() {
     describe("addIndexFromUrl", function() {
 
         it("should add the given index", function() {
-            this.assetFs.addIndexFromUrl("http://example.org/assets/other-index.json");
+            var _this = this;
 
-            expect(this.assetFs.assetExists("test-asset.bin")).to.be.ok();
+            return this.assetFs.addIndexFromUrl("http://example.org/assets/other-index.json")
+                .then(function() {
+                    expect(_this.assetFs.assetExists("test-asset.bin")).to.be.ok();
+                });
         });
 
         it("should resolve the fragments URLs from the URL of the index file by default", function(done) {
+            var _this = this;
             var indexUrl = "http://example.org/assets/other-index.json";
-            this.assetFs.addIndexFromUrl(indexUrl);
 
-            this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal(url.resolve(indexUrl, "test-fragment.oaf"));
-                done();
-            });
-            this.assetFs.preloadAsset("test-asset.bin");
+            this.assetFs.addIndexFromUrl(indexUrl)
+                .then(function() {
+                    _this.assetFs.setDataFetcher(function(url) {
+                        expect(url).to.equal(nodeUrl.resolve(indexUrl, "test-fragment.oaf"));
+                        done();
+                        return Q();
+                    });
+                    _this.assetFs.preloadAsset("test-asset.bin");
+                });
         });
 
         it("should resolve the fragments URLs from the given ABSOLUTE root URL if provided", function(done) {
+            var _this = this;
             var indexUrl = "http://example.org/assets/other-index.json";
-            this.assetFs.addIndexFromUrl(indexUrl, "http://foo.example.com/");
 
-            this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal("http://foo.example.com/test-fragment.oaf");
-                done();
-            });
-            this.assetFs.preloadAsset("test-asset.bin");
+            this.assetFs.addIndexFromUrl(indexUrl, "http://foo.example.com/")
+                .then(function() {
+                    _this.assetFs.setDataFetcher(function(url) {
+                        expect(url).to.equal("http://foo.example.com/test-fragment.oaf");
+                        done();
+                        return Q();
+                    });
+                    _this.assetFs.preloadAsset("test-asset.bin");
+                });
         });
 
         it("should resolve the fragments URLs from the given RELATIVE root URL if provided", function(done) {
+            var _this = this;
             var indexUrl = "http://example.org/assets/other-index.json";
             var root = "./folder/";
-            var resolvedRoot = url.resolve(location.href, root);
+            var resolvedRoot = nodeUrl.resolve(global.location.href, root);
 
-            this.assetFs.addIndexFromUrl(indexUrl, root);
-
-            this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal(url.resolve(resolvedRoot, "test-fragment.oaf"));
-                done();
-            });
-            this.assetFs.preloadAsset("test-asset.bin");
+            this.assetFs.addIndexFromUrl(indexUrl, root)
+                .then(function() {
+                    _this.assetFs.setDataFetcher(function(url) {
+                        expect(url).to.equal(nodeUrl.resolve(resolvedRoot, "test-fragment.oaf"));
+                        done();
+                        return Q();
+                    });
+                    _this.assetFs.preloadAsset("test-asset.bin");
+                });
         });
 
     });
@@ -131,13 +150,15 @@ describe("AssetFs", function() {
     describe("assetLoaded", function() {
 
         it("should return a falsy value if the asset is not loaded", function() {
-            expect(this.assetFs.assetLoaded("random-stuff/bin/asset1.bin")).to.no.be.ok();
+            expect(this.assetFs.assetLoaded("random-stuff/bin/asset1.bin")).not.to.be.ok();
         });
 
         it("sould return a truthy value if the asset is loaded", function() {
+            var _this = this;
+
             return this.assetFs.getAssetAsBlob("random-stuff/bin/asset1.bin")
                 .then(function() {
-                    expect(this.assetFs.assetLoaded("random-stuff/bin/asset1.bin")).to.be.ok();
+                    expect(_this.assetFs.assetLoaded("random-stuff/bin/asset1.bin")).to.be.ok();
                 });
         });
 
@@ -147,8 +168,9 @@ describe("AssetFs", function() {
 
         it("should preload requested assets", function(done) {
             this.assetFs.setDataFetcher(function(url) {
-                expect(url).to.equal(url.resolve(location.href, "4854557d-22f6-4727-96f5-7576a98010ed.oaf"));
+                expect(url).to.equal(nodeUrl.resolve(global.location.href, "4854557d-22f6-4727-96f5-7576a98010ed.oaf"));
                 done();
+                return Q();
             });
             this.assetFs.preloadAsset("random-stuff/bin/asset1.bin");
         });

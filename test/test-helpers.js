@@ -28,7 +28,7 @@ var DEFAULT_INDEX = {
         },
         "data/test.json": {
             offset: 17,
-            length: 5,
+            length: 7,
             mimetype: "application/json",
             fragment: "4854557d-22f6-4727-96f5-7576a98010ed"
         },
@@ -56,7 +56,7 @@ var OTHER_INDEX = {
 };
 
 var FETCHER_DATA = {
-    "4854557d-22f6-4727-96f5-7576a98010ed.oaf": Buffer.from("OAF\x01\x00\x01\x02\x03\x04\x05\x06\x07hello{a:1}"),
+    "4854557d-22f6-4727-96f5-7576a98010ed.oaf": Buffer.from("OAF\x01\x00\x01\x02\x03\x04\x05\x06\x07hello{\"a\":1}"),
     "acd75b37-5798-4408-9288-27888eb1535a.png": Buffer.from([
             0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00,
             0x0d, 0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,

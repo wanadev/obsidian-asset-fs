@@ -270,7 +270,10 @@ describe("AssetFs", function() {
                 .then(function(assetBuffer) {
                     expect(assetBuffer).to.be.a(Buffer);
                     expect(assetBuffer).to.have.length(4);
-                    expect(assetBuffer).to.eql([4, 5, 6, 7]);
+                    expect(assetBuffer[0]).to.equal(4);
+                    expect(assetBuffer[1]).to.equal(5);
+                    expect(assetBuffer[2]).to.equal(6);
+                    expect(assetBuffer[3]).to.equal(7);
                 });
         });
 
@@ -343,7 +346,7 @@ describe("AssetFs", function() {
     describe("getAssetAsObject", function() {
 
         it("returns the asset as an Object", function() {
-            return this.assetFs.getAssetAsObject("assets/textures/category/image.png")
+            return this.assetFs.getAssetAsObject("data/test.json")
                 .then(function(assetObject) {
                     expect(assetObject).to.be.an("object");
                     expect(assetObject.a).to.equal(1);

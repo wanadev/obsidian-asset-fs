@@ -62,6 +62,136 @@
             <li>
                 <a href="client-api.html" class="active">Client Libray API</a>
                 
+                    
+
+    
+    <ul class="toc">
+        
+            <li>
+                <a href="#data-fetcher-function">Data Fetcher Function</a>
+                
+                    
+    <ul class="toc">
+        
+            <li>
+                <a href="#assetfs-setdatafetcher">AssetFs#setDataFetcher</a>
+                
+            </li>
+        
+    </ul>
+
+                
+            </li>
+        
+            <li>
+                <a href="#adding-indexes">Adding Indexes</a>
+                
+                    
+    <ul class="toc">
+        
+            <li>
+                <a href="#assetfs-addindex">AssetFs#AddIndex</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-addindexfromurl">AssetFs#AddIndexFromUrl</a>
+                
+            </li>
+        
+            <li>
+                <a href="#index-format">Index Format</a>
+                
+            </li>
+        
+    </ul>
+
+                
+            </li>
+        
+            <li>
+                <a href="#checking-assets">Checking Assets</a>
+                
+                    
+    <ul class="toc">
+        
+            <li>
+                <a href="#assetfs-assetexists">AssetFs#assetExists</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-assetloaded">AssetFs#AssetLoaded</a>
+                
+            </li>
+        
+    </ul>
+
+                
+            </li>
+        
+            <li>
+                <a href="#preloading-assets">Preloading Assets</a>
+                
+                    
+    <ul class="toc">
+        
+            <li>
+                <a href="#assetfs-preloadasset">AssetFs#preloadAsset</a>
+                
+            </li>
+        
+    </ul>
+
+                
+            </li>
+        
+            <li>
+                <a href="#getting-assets">Getting Assets</a>
+                
+                    
+    <ul class="toc">
+        
+            <li>
+                <a href="#assetfs-getassetasblob">AssetFs#getAssetAsBlob</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-getassetasbloburl">AssetFs#getAssetAsBlobUrl</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-getassetasbuffer">AssetFs#getAssetAsBuffer</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-getassetasimage">AssetFs#getAssetAsImage</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-getassetastext">AssetFs#getAssetAsText</a>
+                
+            </li>
+        
+            <li>
+                <a href="#assetfs-getassetasobject">AssetFs#getAssetAsObject</a>
+                
+            </li>
+        
+    </ul>
+
+                
+            </li>
+        
+    </ul>
+
+
+
+                
             </li>
         
             
@@ -84,7 +214,265 @@
                 
                 <article>
                     <h1 id="client-library-api">Client Library API</h1>
-<p>TODO</p>
+<p>To use <strong>Obsidian Asset FS</strong>, you have at least to instantiate it, to define
+a data fetcher and to add one or more indexes.</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> {AssetFs} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"obsidian-asset-fs"</span>);
+
+<span class="hljs-keyword">const</span> assetFs = <span class="hljs-keyword">new</span> AssetFs();
+
+assetFs.setDataFetcher(yourDataFetcherFunction);  <span class="hljs-comment">// see bellow</span>
+assetFs.addIndex(yourIndexObject);
+
+assetFs.getAssetAsBlob(<span class="hljs-string">"path/to/your/asset"</span>)
+    .then(<span class="hljs-function"><span class="hljs-params">assetBlob</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(assetBlob))
+    .done();</code></pre>
+
+<h2 id="data-fetcher-function">Data Fetcher Function</h2>
+<p><strong>Obsidian Asset FS</strong> requires a fetcher function to be able to get data (most
+often it is for downloading asset using AJAX).</p>
+<h3 id="assetfs-setdatafetcher">AssetFs#setDataFetcher</h3>
+<p>Defines the data fetcher function to use.</p>
+<pre><code class="hljs javascript">assetFs.setDataFetcher(fetcher)  <span class="hljs-comment">// -&gt; undefined</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>fetcher: Function</code>: The function that will download files:</li>
+</ul>
+<pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dataFetcher</span>(<span class="hljs-params">url</span>) </span>{
+    <span class="hljs-comment">// Returns a promises that return a Node.js Buffer as return value.</span>
+}</code></pre>
+
+<p><strong>NOTE:</strong> You can use <code>getRaw</code> and <code>getRawProwy</code> functions from
+<a href="https://github.com/wanadev/obsidian-http-request">obsidian-http-request</a> as fetcher.</p>
+<h2 id="adding-indexes">Adding Indexes</h2>
+<h3 id="assetfs-addindex">AssetFs#AddIndex</h3>
+<p>Register assets from an object.</p>
+<pre><code>assetFs.addIndex(index, rootUrl=<span class="hljs-literal">undefined</span>)  <span class="hljs-comment">// -&gt; undefined</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>index: Object</code>: the index (see below for the format)</li>
+<li><em>(optional)</em> <code>rootUrl: String</code>: the root URL to resolves paths of the
+fragments inside the index. By default, the URL of the current page will be
+used as root URL.</li>
+</ul>
+<h3 id="assetfs-addindexfromurl">AssetFs#AddIndexFromUrl</h3>
+<p>Register assets from a JSON file.</p>
+<pre><code>assetFs.addIndexFromUrl(indexUrl, rootUrl=<span class="hljs-literal">undefined</span>)  <span class="hljs-comment">// -&gt; Promise [undefined]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>indexUrl: String</code>: the index JSON's URL (see below for the format)</li>
+<li><em>(optional)</em> <code>rootUrl: String</code>: the root URL to resolves paths of the
+fragments inside the index. By default, the URL of the index file will be
+used as root URL.</li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="index-format">Index Format</h3>
+<p>Indexes are JSON File or Javascript objects that lists available assets:</p>
+<pre><code>{
+<span class="hljs-symbol">    fragments:</span> {
+        <span class="hljs-comment">//                                       Here, the URL to the files will be  ↓ ↓ ↓</span>
+        <span class="hljs-comment">//                                       resolved using given "rootUrl"      ↓ ↓ ↓</span>
+        <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed"</span>: <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed.oaf"</span>,
+        <span class="hljs-string">"acd75b37-5798-4408-9288-27888eb1535a"</span>: <span class="hljs-string">"acd75b37-5798-4408-9288-27888eb1535a.png"</span>
+    },
+<span class="hljs-symbol">    assets:</span> {
+        <span class="hljs-string">"random-stuff/bin/asset1.bin"</span>: {                       <span class="hljs-comment">// Asset path</span>
+<span class="hljs-symbol">            offset:</span> <span class="hljs-number">4</span>,                                         <span class="hljs-comment">// Asset offset from the packages start</span>
+<span class="hljs-symbol">            length:</span> <span class="hljs-number">4</span>,                                         <span class="hljs-comment">// Asset length</span>
+<span class="hljs-symbol">            mimetype:</span> <span class="hljs-string">"application/octet-stream"</span>,              <span class="hljs-comment">// Asset mimetype</span>
+<span class="hljs-symbol">            fragment:</span> <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed"</span>   <span class="hljs-comment">// Id of the fragment containing the asset</span>
+        },
+        <span class="hljs-string">"random-stuff/bin/asset2.bin"</span>: {
+<span class="hljs-symbol">            offset:</span> <span class="hljs-number">8</span>,
+<span class="hljs-symbol">            length:</span> <span class="hljs-number">4</span>,
+<span class="hljs-symbol">            mimetype:</span> <span class="hljs-string">"application/octet-stream"</span>,
+<span class="hljs-symbol">            fragment:</span> <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed"</span>
+        },
+        <span class="hljs-string">"text.txt"</span>: {
+<span class="hljs-symbol">            offset:</span> <span class="hljs-number">12</span>,
+<span class="hljs-symbol">            length:</span> <span class="hljs-number">5</span>,
+<span class="hljs-symbol">            mimetype:</span> <span class="hljs-string">"text/plain"</span>,
+<span class="hljs-symbol">            fragment:</span> <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed"</span>
+        },
+        <span class="hljs-string">"data/test.json"</span>: {
+<span class="hljs-symbol">            offset:</span> <span class="hljs-number">17</span>,
+<span class="hljs-symbol">            length:</span> <span class="hljs-number">7</span>,
+<span class="hljs-symbol">            mimetype:</span> <span class="hljs-string">"application/json"</span>,
+<span class="hljs-symbol">            fragment:</span> <span class="hljs-string">"4854557d-22f6-4727-96f5-7576a98010ed"</span>
+        },
+        <span class="hljs-string">"assets/textures/category/image.png"</span>: {
+<span class="hljs-symbol">            offset:</span> <span class="hljs-number">0</span>,
+<span class="hljs-symbol">            length:</span> <span class="hljs-number">193</span>,
+<span class="hljs-symbol">            mimetype:</span> <span class="hljs-string">"image/png"</span>,
+<span class="hljs-symbol">            fragment:</span> <span class="hljs-string">"acd75b37-5798-4408-9288-27888eb1535a"</span>
+        }
+    }
+}</code></pre>
+
+
+<h2 id="checking-assets">Checking Assets</h2>
+<h3 id="assetfs-assetexists">AssetFs#assetExists</h3>
+<p>Checks if the given asset exists (if it is listed in the loaded indexes).</p>
+<pre><code class="hljs javascript">assetFs.assetExists(assetPath);  <span class="hljs-comment">// -&gt; Boolean</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Boolean</code></li>
+</ul>
+<h3 id="assetfs-assetloaded">AssetFs#AssetLoaded</h3>
+<p>Checks if the given asset is loaded (already downloaded).</p>
+<pre><code class="hljs javascript">assetFs.assetLoaded(assetPath);  <span class="hljs-comment">// -&gt; Boolean</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Boolean</code></li>
+</ul>
+<h2 id="preloading-assets">Preloading Assets</h2>
+<h3 id="assetfs-preloadasset">AssetFs#preloadAsset</h3>
+<p>Preload (download) the fragment containing the given asset.</p>
+<pre><code class="hljs javascript">assetFs.preloadAsset(assetPath)  <span class="hljs-comment">// -&gt; undefined</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<h2 id="getting-assets">Getting Assets</h2>
+<h3 id="assetfs-getassetasblob">AssetFs#getAssetAsBlob</h3>
+<p>Get the asset as a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</a>.</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsBlob(assetPath)  <span class="hljs-comment">// -&gt; Promise [Blob]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [Blob]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="assetfs-getassetasbloburl">AssetFs#getAssetAsBlobUrl</h3>
+<p>Get the asset as a <a href="https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL">BlobUrl</a>.</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsBlobUrl(assetPath)  <span class="hljs-comment">// -&gt; Promise [String]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [String]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="assetfs-getassetasbuffer">AssetFs#getAssetAsBuffer</h3>
+<p>Get the asset as a <a href="https://nodejs.org/api/buffer.html">Node.js Buffer</a>. In the browser, Node.js Buffers
+are <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a> with augmented prototype (<a href="https://github.com/feross/buffer">more informations</a>).</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsBlobUrl(assetPath)  <span class="hljs-comment">// -&gt; Promise [Buffer]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [Buffer]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="assetfs-getassetasimage">AssetFs#getAssetAsImage</h3>
+<p>Get the asset as an <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement">Image</a>.</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsBlobUrl(assetPath)  <span class="hljs-comment">// -&gt; Promise [HTMLImageElement]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "image/foo/bar.png")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [HTMLImageElement]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="assetfs-getassetastext">AssetFs#getAssetAsText</h3>
+<p>Get the asset as a plain text.</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsText(assetPath)  <span class="hljs-comment">// -&gt; Promise [String]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "foo/hello.txt")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [String]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
+<h3 id="assetfs-getassetasobject">AssetFs#getAssetAsObject</h3>
+<p>Get the asset as a Javascript Object. This will only work if the asset is
+a valid JSON.</p>
+<pre><code class="hljs Javascript">assetFs.fetAssetAsText(assetPath)  <span class="hljs-comment">// -&gt; Promise [Object]</span></code></pre>
+
+<p><strong>Params:</strong></p>
+<ul>
+<li><code>assetPath: String</code>: The asset path (e.g. "data/foo/bar.json")</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Promise [Object]</code></li>
+</ul>
+<p><strong>Throws:</strong></p>
+<ul>
+<li><code>SyntaxError</code>: The asset is not a valid JSON.</li>
+<li><code>UnreferencedAssetError</code>: The requested asset is not referenced by any index.</li>
+<li><code>UnregisteredFragment</code>: The asset is referenced but the fragment that
+contains it is not referenced (this means that the given index contains
+errors).</li>
+<li><code>MissingDataFetcher</code>: No data fetcher was registered.</li>
+</ul>
 
                 </article>
             </div>

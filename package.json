@@ -1,6 +1,6 @@
 {
   "name": "obsidian-asset-fs",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "An high-level way to handle assets in web application",
   "main": "lib/index.js",
   "scripts": {

@@ -16,6 +16,7 @@ For more information, read the doc:
 
 ## Changelog
 
+* **1.1.2**: Fixes `null` asset offset in generated index files
 * **1.1.1**: Fixes bin folder
 * **1.1.0**: A CLI is available for the OAF generation tool (`oafgen`)
 * **1.0.0**: Initial release

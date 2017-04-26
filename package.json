@@ -8,6 +8,9 @@
     "build-test": "browserify test/index.js -o test/browser/test.generated.js",
     "run-test": "phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/browser/index.html spec '{\"useColors\": true}'"
   },
+  "directories": {
+    "bin": "./bin"
+  },
   "keywords": [
     "obsidian",
     "pack",

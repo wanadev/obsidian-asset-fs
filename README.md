@@ -14,3 +14,6 @@ For more information, read the doc:
 * https://wanadev.github.io/obsidian-asset-fs/
 
 
+## Changelog
+
+* **1.1.0**: A CLI is available for the OAF generation tool (`oafgen`)

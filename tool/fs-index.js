@@ -18,15 +18,17 @@ function createIndex(assets, options) {
         _assetsByFragment: {}
     };
 
-    var currentFragmentSize = 0;
+    var currentFragmentSize = options.fragmentHeaderLength;
     var currentFragmentAssets = [];
     var currentFragmentId = uuid.v4();
 
     for (var i = 0 ; i < assets.length ; i++) {
         var asset = assets[i];
-        currentFragmentSize += asset.length;
 
+        asset.offset = currentFragmentSize;
         asset.fragment = currentFragmentId;
+
+        currentFragmentSize += asset.length;
 
         index.assets[asset._assetPath] = asset;
         currentFragmentAssets.push(asset);
@@ -35,13 +37,13 @@ function createIndex(assets, options) {
             index.fragments[currentFragmentId] = currentFragmentId + ".oaf";
             index._assetsByFragment[currentFragmentId] = currentFragmentAssets;
 
-            currentFragmentSize = 0;
+            currentFragmentSize = options.fragmentHeaderLength;
             currentFragmentAssets = [];
             currentFragmentId = uuid.v4();
         }
     }
 
-    if (currentFragmentSize > 0) {
+    if (currentFragmentSize > options.fragmentHeaderLength) {
         index.fragments[currentFragmentId] = currentFragmentId + ".oaf";
         index._assetsByFragment[currentFragmentId] = currentFragmentAssets;
     }

@@ -27,7 +27,7 @@ function _assetListToRecord(cwd, assetList) {
         });
     }
 
-    return assets;
+    return Q(assets);
 }
 
 function _getAssetInfos(assets) {
@@ -37,7 +37,7 @@ function _getAssetInfos(assets) {
         asset.mimetype = helpers.getFileMimeType(asset._filePath);
     }
 
-    return assets;
+    return Q(assets);
 }
 
 function listAssets(paths) {

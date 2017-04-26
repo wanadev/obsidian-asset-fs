@@ -46,7 +46,7 @@ function createIndex(assets, options) {
         index._assetsByFragment[currentFragmentId] = currentFragmentAssets;
     }
 
-    return index;
+    return Q(index);
 }
 
 function cleanIndex(index) {
@@ -57,7 +57,7 @@ function cleanIndex(index) {
         delete index.assets[assetPath]._assetPath;
     }
 
-    return index;
+    return Q(index);
 }
 
 function writeIndex(path, index) {

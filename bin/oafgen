@@ -2,42 +2,64 @@
 
 "use strict";
 
-var path = require("path");
-
-var Q = require("q");
+var yargs = require("yargs");
 
 var obsidianAssetFsTool = require("../tool/index.js");
 
+
+var argv = yargs
+
+    .default("output", process.cwd())
+    .alias("o", "output")
+    .describe("o", "Output folder")
+    .options("o", {type: "string"})
+
+    .default("fragments-size", 2 * 1024 * 1024)
+    .alias("s", "fragments-size")
+    .describe("s", "Average fragment size")
+    .options("s", {type: "number"})
+
+    .default("index-file-name", "index.json")
+    .alias("i", "index-file-name")
+    .describe("i", "Name of the index file in the output folder")
+    .options("i", {type: "string"})
+
+    .default("quiet", false)
+    .alias("q", "quiet")
+    .describe("q", "Do not output logs")
+    .options("q", {type: "boolean"})
+
+    .default("cwd", process.cwd())
+    .alias("c", "cwd")
+    .describe("c", "Current working directory")
+    .options("c", {type: "string"})
+
+    .help("h")
+    .alias("h", "help")
+    .usage("Usage: oafgen [options] <path [path [...]]>")
+
+    .argv;
+
+var paths = argv._;
+
+if (argv.cwd != process.cwd()) {
+    paths = [];
+    for (var i = 0 ; i < argv._.length ; i++) {
+        paths.push({
+            path: argv._[i],
+            cwd: argv.cwd
+        });
+    }
+}
+
 var options = {
-    fragmentSize: 10 * 1024,
-    outputFolder: "./OUT",
-    outputIndexFile: "index.json"
+    fragmentSize: argv["fragments-size"],
+    outputFolder: argv.output,
+    outputIndexFile: argv["index-file-name"],
+    quiet: argv.quiet
 };
 
-obsidianAssetFsTool.assets.list(["lib/**/*.js", {path: "*.js", cwd: "test", ignore: "test-*"}])
-    .then(function(assets) {
-        return obsidianAssetFsTool.index.create(assets, options);
-    })
-    .then(function(index) {
-        var promises = [];
-
-        for (var fragmentId in index._assetsByFragment) {
-            promises.push(
-                obsidianAssetFsTool.fragment.create(index._assetsByFragment[fragmentId])
-                    .then(obsidianAssetFsTool.fragment.write.bind(undefined, path.join(options.outputFolder, index.fragments[fragmentId])))
-                    .then(console.log.bind(console, "* " + index.fragments[fragmentId]))
-                    //.then(console.log.bind(console, index._assetsByFragment[fragmentId].join("\n  * ")))
-            );
-        }
-
-        return Q.all(promises)
-            .then(function() {
-                return index;
-            });
-    })
-    .then(obsidianAssetFsTool.index.clean)
-    .then(obsidianAssetFsTool.index.write.bind(undefined, path.join(options.outputFolder, options.outputIndexFile)))
+obsidianAssetFsTool.generateFromPath(paths, options)
     .done();
-
 
 // vim: ft=javascript

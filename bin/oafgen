@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+"use strict";
+
+var path = require("path");
+
+var Q = require("q");
+
+var obsidianAssetFsTool = require("../tool/index.js");
+
+var options = {
+    fragmentSize: 10 * 1024,
+    outputFolder: "./OUT",
+    outputIndexFile: "index.json"
+};
+
+obsidianAssetFsTool.assets.list(["lib/**/*.js", {path: "*.js", cwd: "test", ignore: "test-*"}])
+    .then(function(assets) {
+        return obsidianAssetFsTool.index.create(assets, options);
+    })
+    .then(function(index) {
+        var promises = [];
+
+        for (var fragmentId in index._assetsByFragment) {
+            promises.push(
+                obsidianAssetFsTool.fragment.create(index._assetsByFragment[fragmentId])
+                    .then(obsidianAssetFsTool.fragment.write.bind(undefined, path.join(options.outputFolder, index.fragments[fragmentId])))
+                    .then(console.log.bind(console, "* " + index.fragments[fragmentId]))
+                    //.then(console.log.bind(console, index._assetsByFragment[fragmentId].join("\n  * ")))
+            );
+        }
+
+        return Q.all(promises)
+            .then(function() {
+                return index;
+            });
+    })
+    .then(obsidianAssetFsTool.index.clean)
+    .then(obsidianAssetFsTool.index.write.bind(undefined, path.join(options.outputFolder, options.outputIndexFile)))
+    .done();
+
+
+// vim: ft=javascript

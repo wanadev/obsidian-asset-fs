@@ -1,5 +1,7 @@
 # Obsidian Asset FS
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wanadev/obsidian-asset-fs.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/wanadev/obsidian-asset-fs.svg?branch=master)](https://travis-ci.org/wanadev/obsidian-asset-fs)
 [![NPM Version](http://img.shields.io/npm/v/obsidian-asset-fs.svg?style=flat)](https://www.npmjs.com/package/obsidian-asset-fs)
 [![License](http://img.shields.io/npm/l/obsidian-asset-fs.svg?style=flat)](https://github.com/wanadev/obsidian-asset-fs/blob/master/LICENSE)

@@ -1,12 +1,11 @@
 # Obsidian Asset FS
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/wanadev/obsidian-asset-fs.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/wanadev/obsidian-asset-fs.svg?branch=master)](https://travis-ci.org/wanadev/obsidian-asset-fs)
 [![NPM Version](http://img.shields.io/npm/v/obsidian-asset-fs.svg?style=flat)](https://www.npmjs.com/package/obsidian-asset-fs)
 [![License](http://img.shields.io/npm/l/obsidian-asset-fs.svg?style=flat)](https://github.com/wanadev/obsidian-asset-fs/blob/master/LICENSE)
 [![Dependencies](https://img.shields.io/david/wanadev/obsidian-asset-fs.svg?maxAge=2592000)]()
 [![Dev Dependencies](https://img.shields.io/david/dev/wanadev/obsidian-asset-fs.svg?maxAge=2592000)]()
+[![Greenkeeper badge](https://badges.greenkeeper.io/wanadev/obsidian-asset-fs.svg)](https://greenkeeper.io/)
 
 **Obsidian Asset FS** abstracts the access to the assets (you do not need to
 know how assets are stored, if they have already been downloaded or not,...).

@@ -17,6 +17,7 @@ For more information, read the doc:
 
 ## Changelog
 
+* **1.1.3**: Updates yargs to 8.x.x
 * **1.1.2**: Fixes `null` asset offset in generated index files
 * **1.1.1**: Fixes bin folder
 * **1.1.0**: A CLI is available for the OAF generation tool (`oafgen`)

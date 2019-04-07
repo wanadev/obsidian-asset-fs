@@ -37,7 +37,7 @@
         "browserify": "^16.2.0",
         "enlightme": "^0.1.1",
         "expect.js": "^0.3.1",
-        "mocha": "^5.1.1",
+        "mocha": "^6.1.1",
         "mocha-phantomjs-core": "^2.1.2",
         "phantomjs-prebuilt": "^2.1.16"
     }

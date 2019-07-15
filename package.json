@@ -31,7 +31,7 @@
         "obsidian-pack": "^1.0.1",
         "q": "^1.5.1",
         "uuid": "^3.2.1",
-        "yargs": "^11.0.0"
+        "yargs": "^13.3.0"
     },
     "devDependencies": {
         "browserify": "^16.2.0",

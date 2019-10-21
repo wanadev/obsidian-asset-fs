@@ -25,7 +25,7 @@
     "license": "BSD-3-Clause",
     "dependencies": {
         "abitbol": "^2.0.0",
-        "glob": "^7.1.2",
+        "glob": "^7.1.5",
         "lodash": "^4.17.5",
         "mimetype": "0.0.8",
         "obsidian-pack": "^1.0.1",

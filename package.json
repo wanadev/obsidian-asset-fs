@@ -30,7 +30,7 @@
         "mimetype": "0.0.8",
         "obsidian-pack": "^1.0.1",
         "q": "^1.5.1",
-        "uuid": "^3.2.1",
+        "uuid": "^8.1.0",
         "yargs": "^11.0.0"
     },
     "devDependencies": {
